@@ -34,8 +34,8 @@ async.series([
       done(err);
     });
 
-    //console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~ newclassList");
-    //console.log(classList);
+    console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~ newclassList");
+    console.log(classList);
     newclassList = classList;
     //console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~");
   },
