@@ -3,9 +3,11 @@ var config = require('../config');
 var read = require('./read');
 var save = require('./save');
 var debug = require('debug')('blog:update:all');
+var db = require('../config').db;
 
 
 var classList;
+var newclassList;
 var articleList = {};
 
 async.series([
@@ -20,35 +22,53 @@ async.series([
 
   // 保存文章分类, 同时更新id
   function (done) {
-    classList = save.classList(classList, done);
+    save.classList(classList, done);
 
+    //save.getclassList(classList, done);
+  },
+
+  // 从数据库获取文章分类列表
+  function (done) {
+    save.getclassList(config.christianpost.url, function (err, list) {
+      classList = list;
+      done(err);
+    });
+
+    console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~ newclassList");
     console.log(classList);
-
+    newclassList = classList;
+    console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~");
   },
 
 
+
+
   // 依次获取所有文章分类下的文章列表
-  //function (done) {
-  //  async.eachSeries(classList, function (c, next) {
-  //    read.articleList(c.url, function (err, list) {
-  //      articleList[c.id] = list;
-  //      debug("c.url: " + c.url);
-  //      debug("c.id: " + c.id);
-  //      debug(list);
-  //      next(err);
-  //    });
-  //
-  //  }, done);
-  //},
-  //
-  //// 保存文章列表
-  //function (done) {
-  //  async.eachSeries(Object.keys(articleList), function (classId, next) {
-  //    debug("classId: " + classId);
-  //    debug("articleList[classId]: " + articleList[classId]);
-  //    save.articleList(classId, articleList[classId], next);
-  //  }, done);
-  //},
+  function (done) {
+    console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~ newclassList 依次获取所有文章分类下的文章列表");
+    console.log(newclassList);
+    console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+
+    async.eachSeries(newclassList, function (c, next) {
+      read.articleList(c.url, function (err, list) {
+        articleList[c.id] = list;
+        debug("c.url: " + c.url);
+        debug("c.id: " + c.id);
+        debug(list);
+        next(err);
+      });
+
+    }, done);
+  },
+
+  // 保存文章列表
+  function (done) {
+    async.eachSeries(Object.keys(articleList), function (classId, next) {
+      debug("classId: " + classId);
+      debug("articleList[classId]: " + articleList[classId]);
+      save.articleList(classId, articleList[classId], next);
+    }, done);
+  },
 
   //
   //// 保存文章数量

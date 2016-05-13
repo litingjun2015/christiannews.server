@@ -1,7 +1,19 @@
+var originRequest = require('request');
 var async = require('async');
 var db = require('../config').db;
 var debug = require('debug')('blog:update:save');
+var cheerio = require('cheerio');
 
+
+/**
+ * 请求指定URL
+ *
+ * @param {String} url
+ * @param {Function} callback
+ */
+function request (url, callback) {
+  originRequest(url, callback);
+}
 
 /**
  * 保存文章分类
@@ -42,13 +54,47 @@ exports.classList = function (list, callback) {
     });
 
     list = newclassList;
-    console.log(list);
+    //console.log(list);
 
     return list;
 
   }, callback);
 
 
+};
+
+exports.getclassList = function (url, callback) {
+  debug('从数据库读取文章分类列表：%s', url);
+
+  request(url, function (err, res) {
+    if (err) return callback(err);
+
+    // 根据网页内容创建DOM操作对象
+    var $ = cheerio.load(res.body.toString());
+
+    // 读取博文类别列表
+    var classList = [];
+    $('.nav-mobile-wrapper li a').each(function () {
+      var $me = $(this);
+      debug($me);
+
+      var item = {
+        name: $me.text().trim(),
+        url:  url + $me.attr('href')
+      };
+      // 从URL中取出分类的ID
+      var s = item.url.match(/articlelist_\d+_(\d+)_\d\.html/);
+      if (Array.isArray(s)) {
+        item.id = s[1];
+        classList.push(item);
+      }
+      else
+        classList.push(item);
+    });
+
+    // 返回结果
+    callback(null, classList);
+  });
 };
 
 /**
@@ -69,7 +115,8 @@ exports.articleList = function (class_id, list, callback) {
       if (err) return next(err);
 
       // 将发布时间转成时间戳（秒）
-      var created_time = new Date(item.time).getTime() / 1000;
+      //var created_time = new Date(item.time).getTime() / 1000;
+      var created_time = new Date().getTime() / 1000;
 
       if (Array.isArray(data) && data.length >= 1) {
         // 分类已存在，更新一下
