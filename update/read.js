@@ -121,7 +121,7 @@ exports.articleList = function (url, callback) {
 exports.articleDetail = function (url, callback) {
   debug('读取博文内容：%s', url);
 
-  request(url, function (err, res) {
+  request(encodeURI(url), function (err, res) {
     if (err) return callback(err);
 
     // 根据网页内容创建DOM操作对象
@@ -137,7 +137,7 @@ exports.articleDetail = function (url, callback) {
     });
 
     // 获取文章内容
-    var content = $('.articalContent').html().trim();
+    var content = $('.entry-content').html().trim();
 
     // 返回结果
     callback(null, {tags: tags, content: content});

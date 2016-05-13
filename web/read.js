@@ -82,6 +82,7 @@ exports.articleListByClassId = function (classId, offset, limit, callback) {
             ' LEFT JOIN `article_detail` AS `B` ON `A`.`id`=`B`.`id`' +
             ' WHERE `A`.`class_id`=?' +
             ' ORDER BY `created_time` DESC LIMIT ?,?';
+  debug(sql);
   db.query(sql, [classId, offset, limit], callback);
 };
 
