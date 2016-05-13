@@ -17,9 +17,74 @@ function readArticleList (url, callback) {
         var articleList = [];
         //debug( $('.post') );
 
-        $('.post').each(function () {
+        var postKeyword = '.post';
+        var titleKeyword = '.entry-title a';
+
+        if(url == 'http://chinese.christianpost.com/')
+        {
+            postKeyword = '.entry-group-h';
+            titleKeyword = '.entry-title-h a'
+        }
+        if(url == 'http://chinese.christianpost.com/opinion/')
+        {
+            postKeyword = '.opi-box-center-list-left';
+            titleKeyword = '.entry-title-blue-opi a'
+
+            $(postKeyword).each(function () {
+                var $me = $(this);
+                var $title = $me.find(titleKeyword);
+                debug( $title.text() );
+                debug( "http://chinese.christianpost.com" + $title.attr('href') );
+
+                //var $time = $me.find('.atc_tm');
+                var item = {
+                    title: $title.text().trim(),
+                    url:   "http://chinese.christianpost.com" + $title.attr('href'),
+                    //time:  $time.text().trim()
+                };
+                // 从URL中取出文章的ID
+                var s = item.url.match(/-([a-zA-Z0-9]+)/);
+                if (Array.isArray(s)) {
+                    item.id = s[1];
+                    articleList.push(item);
+                }
+            });
+
+            postKeyword = '.entry-title-blue-opi';
+            titleKeyword = '.entry-title-blue-opi a'
+
+            $(postKeyword).each(function () {
+                var $me = $(this);
+                var $title = $me.find(titleKeyword);
+                debug( $title.text() );
+                //debug( config.christianpost.url + $title.attr('href') );
+
+                //var $time = $me.find('.atc_tm');
+                var item = {
+                    title: $title.text().trim(),
+                    url:   "http://chinese.christianpost.com" + $title.attr('href'),
+                    //time:  $time.text().trim()
+                };
+                // 从URL中取出文章的ID
+                var s = item.url.match(/-([a-zA-Z0-9]+)/);
+                if (Array.isArray(s)) {
+                    item.id = s[1];
+                    articleList.push(item);
+                }
+            });
+
+            postKeyword = '.opi-box-center-list-right';
+            titleKeyword = '.entry-title-blue-opi a'
+        }
+
+
+
+        $(postKeyword).each(function () {
             var $me = $(this);
-            var $title = $me.find('.entry-title a');
+            var $title = $me.find(titleKeyword);
+
+
+            //console.log($title);
             debug( $title.text() );
             debug( "http://chinese.christianpost.com" + $title.attr('href') );
 
@@ -54,7 +119,7 @@ function readArticleList (url, callback) {
     });
 }
 
-readArticleList('http://chinese.christianpost.com/church', function (err, articleList) {
+readArticleList('http://chinese.christianpost.com/opinion/', function (err, articleList) {
     if (err) console.error(err.stack);
     console.log(articleList);
 });
