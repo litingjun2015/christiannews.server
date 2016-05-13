@@ -34,10 +34,10 @@ async.series([
       done(err);
     });
 
-    console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~ newclassList");
-    console.log(classList);
+    //console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~ newclassList");
+    //console.log(classList);
     newclassList = classList;
-    console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    //console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~");
   },
 
 
@@ -45,16 +45,16 @@ async.series([
 
   // 依次获取所有文章分类下的文章列表
   function (done) {
-    console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~ newclassList 依次获取所有文章分类下的文章列表");
-    console.log(newclassList);
-    console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    //console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~ newclassList 依次获取所有文章分类下的文章列表");
+    //console.log(newclassList);
+    //console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 
     async.eachSeries(newclassList, function (c, next) {
       read.articleList(c.url, function (err, list) {
         articleList[c.id] = list;
         debug("c.url: " + c.url);
         debug("c.id: " + c.id);
-        debug(list);
+        //debug(list);
         next(err);
       });
 
