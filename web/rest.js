@@ -11,7 +11,7 @@ app.get('/listUsers', function (req, res) {
     });
 })
 
-app.get('/listArticles/:class_id/:start_id/:fetch_num', function (req, res) {
+app.get('/listArticles/classid=:class_id&start=:start_id&fetch=:fetch_num', function (req, res) {
 
     db.query('SELECT * FROM `article_list` WHERE `class_id`=? LIMIT ?, ? ',
         [req.params.class_id, parseInt(req.params.start_id), parseInt(req.params.fetch_num) ], function (err, data) {

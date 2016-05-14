@@ -31,6 +31,8 @@ CREATE TABLE IF NOT EXISTS `article_list` (
   KEY `created_time` (`created_time`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+alter table `article_list`
+Add column thumb text AFTER `url`;
 -- --------------------------------------------------------
 
 --

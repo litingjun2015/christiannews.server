@@ -1,11 +1,14 @@
 var request = require('request');
 var cheerio = require('cheerio');
 var debug = require('debug')('blog:update');
+var config = require('../config');
 
 debug('读取博文列表');
 
 
 function readArticleList (url, callback) {
+    debug('读取博文列表：%s', url);
+
     // 读取分类页面
     request(url, function (err, res) {
         if (err) return callback(err);
@@ -19,27 +22,39 @@ function readArticleList (url, callback) {
 
         var postKeyword = '.post';
         var titleKeyword = '.entry-title a';
+        var thumbKeyword = '.entry-thumb-right img';
 
         if(url == 'http://chinese.christianpost.com/')
         {
             postKeyword = '.entry-group-h';
             titleKeyword = '.entry-title-h a'
+            thumbKeyword = '.entry-content-h img';
         }
         if(url == 'http://chinese.christianpost.com/opinion/')
         {
             postKeyword = '.opi-box-center-list-left';
             titleKeyword = '.entry-title-blue-opi a'
+            thumbKeyword = '.opi-box-center-list-left img';
 
             $(postKeyword).each(function () {
                 var $me = $(this);
                 var $title = $me.find(titleKeyword);
+                var $thumb = $me.find(thumbKeyword);
                 debug( $title.text() );
-                debug( "http://chinese.christianpost.com" + $title.attr('href') );
+                debug( config.christianpost.url + $title.attr('href') );
+
+
+                console.log("---------------------");
+                debug( $me );
+                console.log( thumbKeyword );
+                console.log( $thumb );
+                console.log("---------------------");
 
                 //var $time = $me.find('.atc_tm');
                 var item = {
                     title: $title.text().trim(),
-                    url:   "http://chinese.christianpost.com" + $title.attr('href'),
+                    url:   config.christianpost.url + $title.attr('href'),
+                    thumb: $thumb.attr('src'),
                     //time:  $time.text().trim()
                 };
                 // 从URL中取出文章的ID
@@ -57,12 +72,12 @@ function readArticleList (url, callback) {
                 var $me = $(this);
                 var $title = $me.find(titleKeyword);
                 debug( $title.text() );
-                //debug( config.christianpost.url + $title.attr('href') );
+                debug( config.christianpost.url + $title.attr('href') );
 
                 //var $time = $me.find('.atc_tm');
                 var item = {
                     title: $title.text().trim(),
-                    url:   "http://chinese.christianpost.com" + $title.attr('href'),
+                    url:   config.christianpost.url + $title.attr('href'),
                     //time:  $time.text().trim()
                 };
                 // 从URL中取出文章的ID
@@ -75,23 +90,35 @@ function readArticleList (url, callback) {
 
             postKeyword = '.opi-box-center-list-right';
             titleKeyword = '.entry-title-blue-opi a'
+            thumbKeyword = '.opi-box-center-list-right img';
         }
-
 
 
         $(postKeyword).each(function () {
             var $me = $(this);
             var $title = $me.find(titleKeyword);
+            var $thumb = $me.find(thumbKeyword);
 
+            //console.log("---------------------");
+            //debug( $me );
+            //console.log( thumbKeyword );
+            //console.log( $thumb );
+            //console.log("---------------------");
 
-            //console.log($title);
+            if($thumb == '' && url != 'http://chinese.christianpost.com/') {
+                thumbKeyword = '.entry-thumb img';
+                $thumb = $me.find(thumbKeyword);
+            }
+
             debug( $title.text() );
-            debug( "http://chinese.christianpost.com" + $title.attr('href') );
+            debug( config.christianpost.url + $title.attr('href') );
+            debug( $thumb.attr('src') );
 
             //var $time = $me.find('.atc_tm');
             var item = {
                 title: $title.text().trim(),
-                url:   $title.attr('href'),
+                url:   config.christianpost.url + $title.attr('href'),
+                thumb: $thumb.attr('src'),
                 //time:  $time.text().trim()
             };
             // 从URL中取出文章的ID
