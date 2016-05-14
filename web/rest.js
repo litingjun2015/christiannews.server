@@ -4,6 +4,8 @@ var fs = require("fs");
 var db = require('../config').db;
 var debug = require('debug')('blog:web:rest');
 
+var read = require('./read');
+
 app.get('/listUsers', function (req, res) {
     fs.readFile( __dirname + "/" + "users.json", 'utf8', function (err, data) {
         console.log( data );
@@ -25,6 +27,22 @@ app.get('/listArticles/classid=:class_id&start=:start_id&fetch=:fetch_num', func
         });
 
 })
+
+
+// 文章页面
+app.get('/article/:id', function (req, res, next) {
+    // 通过 req.params.id 来取得 URL 中 :id 部分的参数
+    read.article(req.params.id, function (err, article) {
+        if (err) return next(err);
+
+        // 渲染模板
+        res.locals.article = article;
+        //console.log(article);
+        res.end( JSON.stringify(article) );
+        //res.render('article');
+    });
+});
+
 
 app.get('/:id', function (req, res) {
     // First read existing users.

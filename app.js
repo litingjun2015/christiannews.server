@@ -35,6 +35,7 @@ app.get('/article/:id', function (req, res, next) {
 
     // 渲染模板
     res.locals.article = article;
+    //console.log(article);
     res.render('article');
   });
 });
