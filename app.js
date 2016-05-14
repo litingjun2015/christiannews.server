@@ -4,6 +4,7 @@ var spawn = require('child_process').spawn;
 var cronJob = require('cron').CronJob;
 var read = require('./web/read');
 var config = require('./config');
+var db = require('./config').db;
 
 var app = express();
 
@@ -28,6 +29,36 @@ app.get('/', function(req, res, next){
 });
 
 // 文章页面
+//app.get('/article/:id', function (req, res, next) {
+//  // 通过 req.params.id 来取得 URL 中 :id 部分的参数
+//  read.article(req.params.id, function (err, article) {
+//    if (err) return next(err);
+//
+//    // 渲染模板
+//    res.locals.article = article;
+//    //console.log(article);
+//    res.render('article');
+//  });
+//});
+
+// rest api
+
+app.get('/listArticles/classid=:class_id&start=:start_id&fetch=:fetch_num', function (req, res) {
+
+  db.query('SELECT * FROM `article_list` WHERE `class_id`=? LIMIT ?, ? ',
+      [req.params.class_id, parseInt(req.params.start_id), parseInt(req.params.fetch_num) ], function (err, data) {
+        if (err)
+        {
+          console.log( err );
+        }
+
+        console.log( data );
+        res.end( JSON.stringify(data) );
+      });
+
+})
+
+// 文章页面
 app.get('/article/:id', function (req, res, next) {
   // 通过 req.params.id 来取得 URL 中 :id 部分的参数
   read.article(req.params.id, function (err, article) {
@@ -36,7 +67,8 @@ app.get('/article/:id', function (req, res, next) {
     // 渲染模板
     res.locals.article = article;
     //console.log(article);
-    res.render('article');
+    res.end( JSON.stringify(article) );
+    //res.render('article');
   });
 });
 
