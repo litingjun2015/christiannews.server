@@ -33,6 +33,9 @@ CREATE TABLE IF NOT EXISTS `article_list` (
 
 alter table `article_list`
 Add column thumb text AFTER `url`;
+
+alter table `article_list`
+Add column author text AFTER `title`;
 -- --------------------------------------------------------
 
 --

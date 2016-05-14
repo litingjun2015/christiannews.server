@@ -23,38 +23,43 @@ function readArticleList (url, callback) {
         var postKeyword = '.post';
         var titleKeyword = '.entry-title a';
         var thumbKeyword = '.entry-thumb-right img';
+        var authorKeyword = '.entry-byline a'
 
         if(url == 'http://chinese.christianpost.com/')
         {
             postKeyword = '.entry-group-h';
             titleKeyword = '.entry-title-h a'
             thumbKeyword = '.entry-content-h img';
+            authorKeyword = '.entry-byline-h a'
         }
         if(url == 'http://chinese.christianpost.com/opinion/')
         {
             postKeyword = '.opi-box-center-list-left';
             titleKeyword = '.entry-title-blue-opi a'
             thumbKeyword = '.opi-box-center-list-left img';
+            authorKeyword = '.byline a'
 
             $(postKeyword).each(function () {
                 var $me = $(this);
                 var $title = $me.find(titleKeyword);
                 var $thumb = $me.find(thumbKeyword);
+                var $author = $me.find(authorKeyword);
                 debug( $title.text() );
                 debug( config.christianpost.url + $title.attr('href') );
 
 
-                console.log("---------------------");
-                debug( $me );
-                console.log( thumbKeyword );
-                console.log( $thumb );
-                console.log("---------------------");
+                //console.log("---------------------");
+                //debug( $me );
+                //console.log( thumbKeyword );
+                //console.log( $thumb );
+                //console.log("---------------------");
 
                 //var $time = $me.find('.atc_tm');
                 var item = {
                     title: $title.text().trim(),
                     url:   config.christianpost.url + $title.attr('href'),
                     thumb: $thumb.attr('src'),
+                    author: $author.text().trim(),
                     //time:  $time.text().trim()
                 };
                 // 从URL中取出文章的ID
@@ -65,32 +70,38 @@ function readArticleList (url, callback) {
                 }
             });
 
-            postKeyword = '.entry-title-blue-opi';
-            titleKeyword = '.entry-title-blue-opi a'
-
-            $(postKeyword).each(function () {
-                var $me = $(this);
-                var $title = $me.find(titleKeyword);
-                debug( $title.text() );
-                debug( config.christianpost.url + $title.attr('href') );
-
-                //var $time = $me.find('.atc_tm');
-                var item = {
-                    title: $title.text().trim(),
-                    url:   config.christianpost.url + $title.attr('href'),
-                    //time:  $time.text().trim()
-                };
-                // 从URL中取出文章的ID
-                var s = item.url.match(/-([a-zA-Z0-9]+)/);
-                if (Array.isArray(s)) {
-                    item.id = s[1];
-                    articleList.push(item);
-                }
-            });
+            //postKeyword = '.opi-right-info';
+            //titleKeyword = '.entry-title-blue-opi a'
+            //authorKeyword = '.details-opinion-s a'
+            //
+            //$(postKeyword).each(function () {
+            //    var $me = $(this);
+            //    var $title = $me.find(titleKeyword);
+            //    var $thumb = $me.find(thumbKeyword);
+            //    var $author = $me.find(authorKeyword);
+            //    debug( $title.text() );
+            //    debug( config.christianpost.url + $title.attr('href') );
+            //
+            //    //var $time = $me.find('.atc_tm');
+            //    var item = {
+            //        title: $title.text().trim(),
+            //        url:   config.christianpost.url + $title.attr('href'),
+            //        thumb: $thumb.attr('src'),
+            //        author: $author.text().trim(),
+            //        //time:  $time.text().trim()
+            //    };
+            //    // 从URL中取出文章的ID
+            //    var s = item.url.match(/-([a-zA-Z0-9]+)/);
+            //    if (Array.isArray(s)) {
+            //        item.id = s[1];
+            //        articleList.push(item);
+            //    }
+            //});
 
             postKeyword = '.opi-box-center-list-right';
             titleKeyword = '.entry-title-blue-opi a'
             thumbKeyword = '.opi-box-center-list-right img';
+            authorKeyword = '.byline a'
         }
 
 
@@ -98,6 +109,7 @@ function readArticleList (url, callback) {
             var $me = $(this);
             var $title = $me.find(titleKeyword);
             var $thumb = $me.find(thumbKeyword);
+            var $author = $me.find(authorKeyword);
 
             //console.log("---------------------");
             //debug( $me );
@@ -113,12 +125,14 @@ function readArticleList (url, callback) {
             debug( $title.text() );
             debug( config.christianpost.url + $title.attr('href') );
             debug( $thumb.attr('src') );
+            debug( $author.text() );
 
             //var $time = $me.find('.atc_tm');
             var item = {
                 title: $title.text().trim(),
                 url:   config.christianpost.url + $title.attr('href'),
                 thumb: $thumb.attr('src'),
+                author: $author.text().trim(),
                 //time:  $time.text().trim()
             };
             // 从URL中取出文章的ID
