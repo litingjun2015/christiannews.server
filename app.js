@@ -45,7 +45,7 @@ app.get('/', function(req, res, next){
 
 app.get('/listArticles/classid=:class_id&start=:start_id&fetch=:fetch_num', function (req, res) {
 
-  db.query('SELECT * FROM `article_list` WHERE `class_id`=? LIMIT ?, ? ',
+  db.query('SELECT * FROM `article_list` order by substring(time_text,4,12) desc WHERE `class_id`=? LIMIT ?, ? ',
       [req.params.class_id, parseInt(req.params.start_id), parseInt(req.params.fetch_num) ], function (err, data) {
         if (err)
         {
