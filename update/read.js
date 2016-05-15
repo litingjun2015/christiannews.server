@@ -258,10 +258,10 @@ exports.articleDetail = function (url, callback) {
     if($('.entry-content').html() != null)
       var content = $('.entry-content').html().trim();
 
-    var time_text = $('.date').text();
+    var time_text = new Date().Format("yyyy-MM-dd hh:mm");
 
-    if(time_text == null || time_text == '')
-      time_text = new Date().Format("yyyy-MM-dd hh:mm");
+    if($('.date') != null)
+       time_text = $('.date').text();
 
     // 返回结果
     callback(null, {tags: tags, content: content, time_text: time_text});

@@ -20,7 +20,7 @@ Date.prototype.Format = function (fmt) { //author: meizz
     return fmt;
 }
 
-var url = 'http://chinese.christianpost.com/news/%E9%98%BF%E6%8B%89%E5%B7%B4%E9%A9%AC%E5%B7%9E%E6%95%99%E4%BC%9A%E5%B0%86%E4%B8%BA%E4%BC%9A%E5%8F%8B%E7%AD%89%E6%94%AF%E4%BB%984-1%E4%B8%87%E7%BE%8E%E5%85%83%E7%9A%84%E5%80%BA%E5%8A%A1-21424/';
+var url = 'http://chinese.christianpost.com/news/%E5%8D%8E%E7%90%86%E5%85%8B-%E5%9F%BA%E7%9D%A3%E5%BE%92%E5%BF%85%E9%A1%BB%E6%8E%A5%E5%8F%97%E8%80%B6%E7%A8%A3-%E8%80%8C%E4%B8%8D%E5%8F%AA%E6%98%AF-%E5%B8%8C%E6%9C%9B-%E5%8E%BB%E5%A4%A9%E5%A0%82-21442/';
 // 读取博文页面
 request(url, function (err, res) {
     if (err) return callback(err);
@@ -42,7 +42,8 @@ request(url, function (err, res) {
 
     var time_text = $('.date').text();
 
-    time_text = new Date().Format("yyyy-MM-dd hh:mm");
+    if(time_text == null || time_text == '')
+        time_text = new Date().Format("yyyy-MM-dd hh:mm");
 
 
 
