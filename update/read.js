@@ -3,6 +3,21 @@ var config = require('../config');
 var cheerio = require('cheerio');
 var debug = require('debug')('blog:update:read');
 
+Date.prototype.Format = function (fmt) { //author: meizz
+  var o = {
+    "M+": this.getMonth() + 1, //月份
+    "d+": this.getDate(), //日
+    "h+": this.getHours(), //小时
+    "m+": this.getMinutes(), //分
+    "s+": this.getSeconds(), //秒
+    "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+    "S": this.getMilliseconds() //毫秒
+  };
+  if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+  for (var k in o)
+    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+  return fmt;
+}
 
 /**
  * 请求指定URL
@@ -240,9 +255,15 @@ exports.articleDetail = function (url, callback) {
     });
 
     // 获取文章内容
-    var content = $('.entry-content').html().trim();
+    if($('.entry-content').html() != null)
+      var content = $('.entry-content').html().trim();
+
+    var time_text = $('.date').text();
+
+    if(time_text == null || time_text == '')
+      time_text = new Date().Format("yyyy-MM-dd hh:mm");
 
     // 返回结果
-    callback(null, {tags: tags, content: content});
+    callback(null, {tags: tags, content: content, time_text: time_text});
   });
 };

@@ -36,6 +36,9 @@ Add column thumb text AFTER `url`;
 
 alter table `article_list`
 Add column author text AFTER `title`;
+
+alter table `article_list`
+Add column time_text text AFTER `created_time`;
 -- --------------------------------------------------------
 
 --

@@ -182,7 +182,7 @@ exports.articleTags = function (id, tags, callback) {
  * @param {String} content
  * @param {Function} callback
  */
-exports.articleDetail = function (id, tags, content, callback) {
+exports.articleDetail = function (id, tags, content, time_text, callback) {
   debug('保存文章内容: %s', id);
 
   // 检查文章是否存在
@@ -197,6 +197,17 @@ exports.articleDetail = function (id, tags, content, callback) {
       // 添加文章
       db.query('INSERT INTO `article_detail`(`id`, `tags`, `content`) VALUES (?, ?, ?)', [id, tags, content], callback);
     }
+  });
+
+
+  db.query('SELECT `id` FROM `article_list` WHERE `id`=?', [id], function (err, data) {
+    if (err) return callback(err);
+
+    if (Array.isArray(data) && data.length >= 1) {
+      // 更新文章
+      db.query('UPDATE `article_list` SET `time_text`=? WHERE `id`=?', [time_text, id], callback);
+    }
+
   });
 };
 
