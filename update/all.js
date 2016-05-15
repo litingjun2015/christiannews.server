@@ -122,6 +122,19 @@ async.series([
 ], function (err) {
   if (err) console.error(err.stack);
 
-  console.log('完成');
-  process.exit(0);
+  db.query('delete FROM article_list where id not in (select id from article_detail)', function (err, data) {
+    if (err)
+    {
+      debug(err);
+      return callback(err);
+    }
+
+    debug(data);
+
+    console.log('完成');
+    process.exit(0);
+
+  });
+
+
 });

@@ -20,13 +20,20 @@ Date.prototype.Format = function (fmt) { //author: meizz
     return fmt;
 }
 
-var url = 'http://chinese.christianpost.com/news/%E5%8D%8E%E7%90%86%E5%85%8B-%E5%9F%BA%E7%9D%A3%E5%BE%92%E5%BF%85%E9%A1%BB%E6%8E%A5%E5%8F%97%E8%80%B6%E7%A8%A3-%E8%80%8C%E4%B8%8D%E5%8F%AA%E6%98%AF-%E5%B8%8C%E6%9C%9B-%E5%8E%BB%E5%A4%A9%E5%A0%82-21442/';
+var url = 'http://m.chinese.christianpost.com/news/%E4%BD%BF%E5%90%AC%E9%81%93%E6%9B%B4%E6%9C%89%E6%9E%9C%E6%95%88%E7%9A%847%E4%B8%AA%E6%96%B9%E6%B3%95-21601/';
 // 读取博文页面
 request(url, function (err, res) {
     if (err) return callback(err);
 
     // 根据网页内容创建DOM操作对象
     var $ = cheerio.load(res.body.toString());
+
+    var s = url.match(/-([a-zA-Z0-9]+)\//);
+    debug(s);
+    if (Array.isArray(s)) {
+        id = s[1];
+        debug(id);
+    }
 
     // 获取文章标签
     var tags = [];
@@ -38,7 +45,9 @@ request(url, function (err, res) {
     });
 
     // 获取文章内容
-    var content = $('.entry-content').html().trim();
+    //var content = $('.entry-content').html().trim();
+    //var content = res.body.toString();
+    var content = $('article').html().trim();
 
     var time_text = $('.date').text();
 

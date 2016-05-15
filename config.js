@@ -23,6 +23,7 @@ exports.sinaBlog = {
 
 exports.christianpost = {
   url: 'http://chinese.christianpost.com',
+  murl: 'http://m.chinese.christianpost.com',
   archive: 'http://chinese.christianpost.com/archive/',
 };
 

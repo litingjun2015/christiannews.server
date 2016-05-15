@@ -39,6 +39,7 @@ Add column author text AFTER `title`;
 
 alter table `article_list`
 Add column time_text text AFTER `created_time`;
+
 -- --------------------------------------------------------
 
 --
@@ -64,3 +65,8 @@ CREATE TABLE IF NOT EXISTS `class_list` (
   `count` int(11) NOT NULL,
   PRIMARY KEY (`id`,`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+truncate table article_detail;
+truncate table article_list;
+truncate table article_tag;
+truncate table class_list;

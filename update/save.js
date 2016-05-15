@@ -2,6 +2,7 @@ var originRequest = require('request');
 var async = require('async');
 var db = require('../config').db;
 var debug = require('debug')('blog:update:save');
+var debug2 = require('debug')('blog:debug2');
 var cheerio = require('cheerio');
 
 
@@ -184,6 +185,7 @@ exports.articleTags = function (id, tags, callback) {
  */
 exports.articleDetail = function (id, tags, content, time_text, callback) {
   debug('保存文章内容: %s', id);
+  debug2('保存文章内容: %s', id);
 
   // 检查文章是否存在
   db.query('SELECT `id` FROM `article_detail` WHERE `id`=?', [id], function (err, data) {

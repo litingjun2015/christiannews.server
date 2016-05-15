@@ -115,7 +115,7 @@ exports.articleList = function (url, callback) {
         var $thumb = $me.find(thumbKeyword);
         var $author = $me.find(authorKeyword);
         debug( $title.text() );
-        debug( config.christianpost.url + $title.attr('href') );
+        debug( config.christianpost.murl + $title.attr('href') );
 
 
         //console.log("---------------------");
@@ -127,13 +127,13 @@ exports.articleList = function (url, callback) {
         //var $time = $me.find('.atc_tm');
         var item = {
           title: $title.text().trim(),
-          url:   config.christianpost.url + $title.attr('href'),
+          url:   config.christianpost.murl + $title.attr('href'),
           thumb: $thumb.attr('src'),
           author: $author.text().trim(),
           //time:  $time.text().trim()
         };
         // 从URL中取出文章的ID
-        var s = item.url.match(/-([a-zA-Z0-9]+)/);
+        var s = item.url.match(/-([a-zA-Z0-9]+)\//);
         if (Array.isArray(s)) {
           item.id = s[1];
           articleList.push(item);
@@ -150,18 +150,18 @@ exports.articleList = function (url, callback) {
       //    var $thumb = $me.find(thumbKeyword);
       //    var $author = $me.find(authorKeyword);
       //    debug( $title.text() );
-      //    debug( config.christianpost.url + $title.attr('href') );
+      //    debug( config.christianpost.murl + $title.attr('href') );
       //
       //    //var $time = $me.find('.atc_tm');
       //    var item = {
       //        title: $title.text().trim(),
-      //        url:   config.christianpost.url + $title.attr('href'),
+      //        url:   config.christianpost.murl + $title.attr('href'),
       //        thumb: $thumb.attr('src'),
       //        author: $author.text().trim(),
       //        //time:  $time.text().trim()
       //    };
       //    // 从URL中取出文章的ID
-      //    var s = item.url.match(/-([a-zA-Z0-9]+)/);
+      //    var s = item.url.match(/-([a-zA-Z0-9]+)\//);
       //    if (Array.isArray(s)) {
       //        item.id = s[1];
       //        articleList.push(item);
@@ -193,20 +193,20 @@ exports.articleList = function (url, callback) {
       }
 
       debug( $title.text() );
-      debug( config.christianpost.url + $title.attr('href') );
+      debug( config.christianpost.murl + $title.attr('href') );
       debug( $thumb.attr('src') );
       debug( $author.text() );
 
       //var $time = $me.find('.atc_tm');
       var item = {
         title: $title.text().trim(),
-        url:   config.christianpost.url + $title.attr('href'),
+        url:   config.christianpost.murl + $title.attr('href'),
         thumb: $thumb.attr('src'),
         author: $author.text().trim(),
         //time:  $time.text().trim()
       };
       // 从URL中取出文章的ID
-      var s = item.url.match(/-([a-zA-Z0-9]+)/);
+      var s = item.url.match(/-([a-zA-Z0-9]+)\//);
       if (Array.isArray(s)) {
         item.id = s[1];
         articleList.push(item);
@@ -255,8 +255,12 @@ exports.articleDetail = function (url, callback) {
     });
 
     // 获取文章内容
-    if($('.entry-content').html() != null)
-      var content = $('.entry-content').html().trim();
+    //if($('.entry-content').html() != null)
+    //  var content = $('.entry-content').html().trim();
+    if($('article').html() != null)
+      var content = $('article').html().trim();
+
+    //debug(content);
 
     var time_text = new Date().Format("yyyy-MM-dd hh:mm");
 
