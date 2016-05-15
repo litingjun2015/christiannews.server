@@ -1,7 +1,7 @@
 var async = require('async');
 var config = require('../config');
 var read = require('./read_archive');
-var save = require('./save');
+var save = require('./save_archive');
 var debug = require('debug')('blog:update:all');
 var db = require('../config').db;
 
@@ -14,7 +14,7 @@ async.series([
 
   // 获取文章分类列表
   function (done) {
-    read.classList(config.christianpost.archive, function (err, list) {
+    read.classList(config.christianpost.url, function (err, list) {
       classList = list;
       done(err);
     });
@@ -28,38 +28,38 @@ async.series([
   },
 
   // 从数据库获取文章分类列表
-  //function (done) {
-  //  save.getclassList(config.christianpost.url, function (err, list) {
-  //    classList = list;
-  //    done(err);
-  //  });
-  //
-  //  console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~ newclassList");
-  //  console.log(classList);
-  //  newclassList = classList;
-  //  //console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-  //},
-  //
-  //
-  //
-  //
-  //// 依次获取所有文章分类下的文章列表
-  //function (done) {
-  //  //console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~ newclassList 依次获取所有文章分类下的文章列表");
-  //  //console.log(newclassList);
-  //  //console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-  //
-  //  async.eachSeries(newclassList, function (c, next) {
-  //    read.articleList(c.url, function (err, list) {
-  //      articleList[c.id] = list;
-  //      debug("c.url: " + c.url);
-  //      debug("c.id: " + c.id);
-  //      //debug(list);
-  //      next(err);
-  //    });
-  //
-  //  }, done);
-  //},
+  function (done) {
+    save.getclassList(config.christianpost.url, function (err, list) {
+      classList = list;
+      done(err);
+    });
+
+    console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~ newclassList");
+    console.log(classList);
+    newclassList = classList;
+    //console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+  },
+
+
+
+
+  // 依次获取所有文章分类下的文章列表
+  function (done) {
+    //console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~ newclassList 依次获取所有文章分类下的文章列表");
+    //console.log(newclassList);
+    //console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+
+    async.eachSeries(newclassList, function (c, next) {
+      read.articleList(c.url, function (err, list) {
+        articleList[c.id] = list;
+        debug("c.url: " + c.url);
+        debug("c.id: " + c.id);
+        //debug(list);
+        next(err);
+      });
+
+    }, done);
+  },
   //
   //// 保存文章列表
   //function (done) {

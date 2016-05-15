@@ -90,9 +90,9 @@ exports.articleList = function (url, callback) {
     var articleList = [];
     //debug( $('.post') );
 
-    var postKeyword = '.post';
-    var titleKeyword = '.entry-title a';
-    var thumbKeyword = '.entry-thumb-right img';
+    var postKeyword = 'ul li';
+    var titleKeyword = 'a';
+    var thumbKeyword = '.summary img';
     var authorKeyword = '.entry-byline a'
 
     if(url == 'http://chinese.christianpost.com/')
@@ -102,6 +102,7 @@ exports.articleList = function (url, callback) {
       thumbKeyword = '.entry-content-h img';
       authorKeyword = '.entry-byline-h a'
     }
+
     if(url == 'http://chinese.christianpost.com/opinion/')
     {
       postKeyword = '.opi-box-center-list-left';
@@ -115,7 +116,7 @@ exports.articleList = function (url, callback) {
         var $thumb = $me.find(thumbKeyword);
         var $author = $me.find(authorKeyword);
         debug( $title.text() );
-        debug( config.christianpost.url + $title.attr('href') );
+        debug( config.christianpost.murl + $title.attr('href') );
 
 
         //console.log("---------------------");
@@ -127,7 +128,7 @@ exports.articleList = function (url, callback) {
         //var $time = $me.find('.atc_tm');
         var item = {
           title: $title.text().trim(),
-          url:   config.christianpost.url + $title.attr('href'),
+          url:   config.christianpost.murl + $title.attr('href'),
           thumb: $thumb.attr('src'),
           author: $author.text().trim(),
           //time:  $time.text().trim()
@@ -150,12 +151,12 @@ exports.articleList = function (url, callback) {
       //    var $thumb = $me.find(thumbKeyword);
       //    var $author = $me.find(authorKeyword);
       //    debug( $title.text() );
-      //    debug( config.christianpost.url + $title.attr('href') );
+      //    debug( config.christianpost.murl + $title.attr('href') );
       //
       //    //var $time = $me.find('.atc_tm');
       //    var item = {
       //        title: $title.text().trim(),
-      //        url:   config.christianpost.url + $title.attr('href'),
+      //        url:   config.christianpost.murl + $title.attr('href'),
       //        thumb: $thumb.attr('src'),
       //        author: $author.text().trim(),
       //        //time:  $time.text().trim()
@@ -175,8 +176,10 @@ exports.articleList = function (url, callback) {
     }
 
 
-    $(postKeyword).each(function () {
+    $('ul li').each(function () {
       var $me = $(this);
+      //debug($me);
+
       var $title = $me.find(titleKeyword);
       var $thumb = $me.find(thumbKeyword);
       var $author = $me.find(authorKeyword);
@@ -193,14 +196,14 @@ exports.articleList = function (url, callback) {
       }
 
       debug( $title.text() );
-      debug( config.christianpost.url + $title.attr('href') );
+      debug( config.christianpost.murl + $title.attr('href') );
       debug( $thumb.attr('src') );
       debug( $author.text() );
 
       //var $time = $me.find('.atc_tm');
       var item = {
         title: $title.text().trim(),
-        url:   config.christianpost.url + $title.attr('href'),
+        url:   config.christianpost.murl + $title.attr('href'),
         thumb: $thumb.attr('src'),
         author: $author.text().trim(),
         //time:  $time.text().trim()
@@ -214,10 +217,12 @@ exports.articleList = function (url, callback) {
     });
 
     // 检查是否有下一页
-    var nextUrl = $('.SG_pgnext a').attr('href');
-    if (nextUrl) {
+    var nextUrl = config.christianpost.url + $('.pageNext a').attr('href');
+    if ( $('.pageNext a').attr('href') ) {
+      console.log(nextUrl);
+
       // 读取下一页
-      readArticleList(nextUrl, function (err, articleList2) {
+      exports.articleList(nextUrl, function (err, articleList2) {
         if (err) return callback(err);
 
         // 合并结果
