@@ -103,10 +103,10 @@ async.series([
       save.isAericleExists(item.id, function (err, exists) {
         if (err) return next(err);
 
-        //if (exists) {
-        //  debug('文章已存在：%s', item.url);
-        //  return next();
-        //}
+        if (exists) {
+          debug('文章已存在：%s', item.url);
+          return next();
+        }
 
         read.articleDetail(item.url, function (err, ret) {
           if (err) return next(err);

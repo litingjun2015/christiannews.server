@@ -46,6 +46,7 @@ request(url, function (err, res) {
         time_text = new Date().Format("yyyy-MM-dd hh:mm");
 
 
+    time_text = new Date().Format("yyyy-MM-dd hh:mm");
 
     // 输出结果
     console.log({tags: tags, content: content, time_text: time_text});
