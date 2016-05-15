@@ -22,7 +22,8 @@ exports.sinaBlog = {
 };
 
 exports.christianpost = {
-  url: 'http://chinese.christianpost.com'
+  url: 'http://chinese.christianpost.com',
+  archive: 'http://chinese.christianpost.com/archive/',
 };
 
 // Web服务器端口
