@@ -261,13 +261,17 @@ exports.articleDetail = function (url, callback) {
     });
 
     // 获取文章内容
-    if($('.entry-content').html() != null)
-      var content = $('.entry-content').html().trim();
+    //if($('.entry-content').html() != null)
+    //  var content = $('.entry-content').html().trim();
+    if($('article').html() != null)
+      var content = $('article').html().trim();
+
+    //debug(content);
 
     var time_text = new Date().Format("yyyy-MM-dd hh:mm");
 
     if($('.date') != null)
-       time_text = $('.date').text();
+      time_text = $('.date').text();
 
     // 返回结果
     callback(null, {tags: tags, content: content, time_text: time_text});
