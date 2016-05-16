@@ -96,7 +96,7 @@ app.get('/searchArticles/keywordslist=:keywordslist&start=:start_id&fetch=:fetch
                 console.log( err );
             }
 
-            console.log( data );
+            //console.log( data );
             res.end( JSON.stringify(data) );
         });
 
@@ -111,7 +111,7 @@ app.get('/listArticles/classid=:class_id&start=:start_id&fetch=:fetch_num', func
           console.log( err );
         }
 
-        console.log( data );
+        //console.log( data );
         res.end( JSON.stringify(data) );
       });
 

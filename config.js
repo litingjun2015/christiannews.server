@@ -1,5 +1,25 @@
 // MySQL数据库连接配置
 var mysql = require('mysql');
+
+//exports.db  = mysql.createPool({
+//  connectionLimit : 10,
+//  host            : '127.0.0.1',
+//  port            : 3306,          // 数据库端口
+//  user            : 'root',
+//  password        : '619126',
+//  database        : 'christianpost'
+//});
+
+exports.db  = mysql.createPool({
+  connectionLimit : 10,
+  host            : '559f471ab5cd7.gz.cdb.myqcloud.com',
+  port            : 18281,          // 数据库端口
+  user            : 'cdb_outerroot',
+  password        : 'DuangWiFi2015',
+  database        : 'christianpost'
+});
+
+
 //exports.db = mysql.createConnection({
 //  host:            '127.0.0.1',   // 数据库地址
 //  port:            3306,          // 数据库端口
@@ -8,13 +28,13 @@ var mysql = require('mysql');
 //  password:        '619126'             // 数据库用户对应的密码
 //});
 
-exports.db = mysql.createConnection({
-  host:            '559f471ab5cd7.gz.cdb.myqcloud.com',   // 数据库地址
-  port:            18281,          // 数据库端口
-  database:        'christianpost',   // 数据库名称
-  user:            'cdb_outerroot',        // 数据库用户
-  password:        'DuangWiFi2015'             // 数据库用户对应的密码
-});
+//exports.db = mysql.createConnection({
+//  host:            '559f471ab5cd7.gz.cdb.myqcloud.com',   // 数据库地址
+//  port:            18281,          // 数据库端口
+//  database:        'christianpost',   // 数据库名称
+//  user:            'cdb_outerroot',        // 数据库用户
+//  password:        'DuangWiFi2015'             // 数据库用户对应的密码
+//});
 
 // 博客配置
 exports.sinaBlog = {
