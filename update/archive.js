@@ -65,7 +65,7 @@ async.series([
   function (done) {
     async.eachSeries(Object.keys(articleList), function (classId, next) {
       debug("classId: " + classId);
-      debug("articleList[classId]: " + articleList[classId]);
+      //debug("articleList[classId]: " + articleList[classId]);
       save.articleList(classId, articleList[classId], next);
     }, done);
   },
@@ -110,10 +110,14 @@ async.series([
 
         read.articleDetail(item.url, function (err, ret) {
           if (err) return next(err);
-          save.articleDetail(item.id, ret.tags, ret.content, ret.time_text, function (err) {
-            if (err) return next(err);
-            save.articleTags(item.id, ret.tags, next);
-          });
+
+          if(ret.content != null)
+          {
+            save.articleDetail(item.id, ret.tags, ret.content, ret.time_text, function (err) {
+              if (err) return next(err);
+              save.articleTags(item.id, ret.tags, next);
+            });
+          }
         });
       });
     }, done);
