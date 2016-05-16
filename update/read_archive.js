@@ -85,15 +85,16 @@ exports.articleList = function (url, callback) {
 
     // 根据网页内容创建DOM操作对象
     var $ = cheerio.load(res.body.toString());
+    //var $ = cheerio.load('<ul id="mainBody">...</ul>');
 
     // 读取博文列表
     var articleList = [];
     //debug( $('.post') );
 
-    var postKeyword = 'ul li';
+    var postKeyword = '#mainBody li';
     var titleKeyword = 'a';
     var thumbKeyword = '.summary img';
-    var authorKeyword = '.entry-byline a'
+    var authorKeyword = '.author a'
 
     if(url == 'http://chinese.christianpost.com/')
     {
@@ -134,7 +135,7 @@ exports.articleList = function (url, callback) {
           //time:  $time.text().trim()
         };
         // 从URL中取出文章的ID
-        var s = item.url.match(/-([a-zA-Z0-9]+)/);
+        var s = item.url.match(/-([a-zA-Z0-9]+)\//);
         if (Array.isArray(s)) {
           item.id = s[1];
           articleList.push(item);
@@ -162,7 +163,7 @@ exports.articleList = function (url, callback) {
       //        //time:  $time.text().trim()
       //    };
       //    // 从URL中取出文章的ID
-      //    var s = item.url.match(/-([a-zA-Z0-9]+)/);
+      //    var s = item.url.match(/-([a-zA-Z0-9]+)\//);
       //    if (Array.isArray(s)) {
       //        item.id = s[1];
       //        articleList.push(item);
@@ -176,7 +177,7 @@ exports.articleList = function (url, callback) {
     }
 
 
-    $('ul li').each(function () {
+    $(postKeyword).each(function () {
       var $me = $(this);
       //debug($me);
 
@@ -209,7 +210,7 @@ exports.articleList = function (url, callback) {
         //time:  $time.text().trim()
       };
       // 从URL中取出文章的ID
-      var s = item.url.match(/-([a-zA-Z0-9]+)/);
+      var s = item.url.match(/-([a-zA-Z0-9]+)\//);
       if (Array.isArray(s)) {
         item.id = s[1];
         articleList.push(item);
