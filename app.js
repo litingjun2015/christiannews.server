@@ -43,6 +43,65 @@ app.get('/', function(req, res, next){
 
 // rest api
 
+app.get('/searchArticlesNum/keywordslist=:keywordslist', function (req, res) {
+
+    var arr = req.params.keywordslist.split(" ");
+    console.log(arr);
+
+    var sql = 'SELECT count(*) num FROM `article_list` AS `A`' +
+        ' LEFT JOIN `article_detail` AS `B` ON `A`.`id`=`B`.`id`' +
+        ' WHERE 1=2 ';
+
+    var condtion = '';
+    for(var i = 0; i < arr.length;i++){
+        condtion = condtion + ' or `A`.`title` like \'%' + arr[i] + '%\'' + ' or `B`.`content` like \'%' + arr[i] + '%\'';
+    }
+    sql = sql + condtion;
+
+    console.log(sql);
+
+    db.query(sql, function (err, data) {
+            if (err)
+            {
+                console.log( err );
+            }
+
+            console.log( data );
+            res.end( JSON.stringify(data) );
+        });
+
+})
+
+app.get('/searchArticles/keywordslist=:keywordslist&start=:start_id&fetch=:fetch_num', function (req, res) {
+
+    var arr = req.params.keywordslist.split(" ");
+    console.log(arr);
+
+    var sql = 'SELECT * FROM `article_list` AS `A`' +
+        ' LEFT JOIN `article_detail` AS `B` ON `A`.`id`=`B`.`id`' +
+        ' WHERE 1=2 ';
+
+    var condtion = '';
+    for(var i = 0; i < arr.length;i++){
+        condtion = condtion + ' or `A`.`title` like \'%' + arr[i] + '%\'' + ' or `B`.`content` like \'%' + arr[i] + '%\'';
+    }
+    sql = sql + condtion + ' LIMIT ?, ? ';
+
+    console.log(sql);
+
+    db.query(sql,
+        [parseInt(req.params.start_id), parseInt(req.params.fetch_num) ], function (err, data) {
+            if (err)
+            {
+                console.log( err );
+            }
+
+            console.log( data );
+            res.end( JSON.stringify(data) );
+        });
+
+})
+
 app.get('/listArticles/classid=:class_id&start=:start_id&fetch=:fetch_num', function (req, res) {
 
   db.query('SELECT * FROM `article_list` WHERE `class_id`=? order by id desc LIMIT ?, ? ',
@@ -77,16 +136,16 @@ console.log('服务器已启动');
 
 
 // 定时执行更新任务
-var job = new cronJob(config.autoUpdate, function () {
-  console.log('开始执行定时更新任务');
-  var update = spawn(process.execPath, [path.resolve(__dirname, 'update/all.js')]);
-  update.stdout.pipe(process.stdout);
-  update.stderr.pipe(process.stderr);
-  update.on('close', function (code) {
-    console.log('更新任务结束，代码=%d', code);
-  });
-});
-job.start();
+//var job = new cronJob(config.autoUpdate, function () {
+//  console.log('开始执行定时更新任务');
+//  var update = spawn(process.execPath, [path.resolve(__dirname, 'update/all.js')]);
+//  update.stdout.pipe(process.stdout);
+//  update.stderr.pipe(process.stderr);
+//  update.on('close', function (code) {
+//    console.log('更新任务结束，代码=%d', code);
+//  });
+//});
+//job.start();
 
 
 process.on('uncaughtException', function (err) {

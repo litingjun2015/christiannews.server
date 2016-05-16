@@ -65,7 +65,7 @@ async.series([
   function (done) {
     async.eachSeries(Object.keys(articleList), function (classId, next) {
       debug("classId: " + classId);
-      debug("articleList[classId]: " + articleList[classId]);
+      //debug("articleList[classId]: " + articleList[classId]);
       save.articleList(classId, articleList[classId], next);
     }, done);
   },
