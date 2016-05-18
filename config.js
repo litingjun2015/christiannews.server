@@ -13,12 +13,22 @@ var mysql = require('mysql');
 exports.db  = mysql.createPool({
   connectionLimit : 10,
   acquireTimeout  : 30000, // 30s
-  host            : '559f471ab5cd7.gz.cdb.myqcloud.com',
-  port            : 18281,          // 数据库端口
-  user            : 'cdb_outerroot',
-  password        : 'DuangWiFi2015',
-  database        : 'christianpost'
+  host            : '127.0.0.1',
+  port            : 3306,          // 数据库端口
+  user            : 'duangwifi_cn',
+  password        : 'nC3A9OgQE4bzwR8',
+  database        : 'duangwifi_cn'
 });
+
+//exports.db  = mysql.createPool({
+//  connectionLimit : 10,
+//  acquireTimeout  : 30000, // 30s
+//  host            : '559f471ab5cd7.gz.cdb.myqcloud.com',
+//  port            : 18281,          // 数据库端口
+//  user            : 'cdb_outerroot',
+//  password        : 'DuangWiFi2015',
+//  database        : 'christianpost'
+//});
 
 
 //exports.db = mysql.createConnection({
