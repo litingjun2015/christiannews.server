@@ -12,6 +12,7 @@ var mysql = require('mysql');
 
 exports.db  = mysql.createPool({
   connectionLimit : 10,
+  acquireTimeout  : 30000, // 30s
   host            : '559f471ab5cd7.gz.cdb.myqcloud.com',
   port            : 18281,          // 数据库端口
   user            : 'cdb_outerroot',
