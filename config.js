@@ -65,6 +65,14 @@ exports.christianpost = {
   archive: 'http://chinese.christianpost.com/archive/',
 };
 
+exports.yimaneili = {
+  homeurl: 'http://www.yimaneili.net',
+  gongyuurl: 'http://www.yimaneili.net/gongyu/',
+  url: 'http://www.yimaneili.net/gongyu/network.php',
+  murl: 'http://m.chinese.christianpost.com',
+  archive: 'http://chinese.christianpost.com/archive/',
+};
+
 // Web服务器端口
 exports.port = 3000;
 
