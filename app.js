@@ -1,3 +1,4 @@
+var async = require('async');
 var path = require('path');
 var express = require('express');
 var spawn = require('child_process').spawn;
@@ -42,6 +43,84 @@ app.get('/', function(req, res, next){
 //});
 
 // rest api
+
+
+app.get('/taglist', function (req, res) {
+
+    var ret;
+    async.series({
+        one: function(callback){
+            callback(null, 1);
+        },
+        two: function(callback){
+            callback(null, 2);
+        },
+
+        ret_array: function(callback){
+
+            var ret_array = [];
+
+            async.waterfall([
+                function(callback) {
+                    db.query('SELECT DISTINCT category_name FROM class_list',
+                        function(err, rows){
+                            callback(err, rows);
+                        });
+                },
+                function(rows, callback){
+                    var callbackRows = rows;
+                    //console.log(callbackRows);
+                    //async.eachSeries(callbackRows, function(row, key, callback){
+                    async.eachSeries(callbackRows, function(row, callback){
+                        var topics
+                        //console.log('row.category_name: ', row.category_name);
+
+                        var query = row.category_name
+                        db.query('SELECT name,id FROM `class_list` WHERE `category_name`=? order by CAST(id AS UNSIGNED) ',
+                            [query], function(err, rows){
+                                //callbackRows[key].subTopics = rows;
+                                //topics = callBackRows;
+                                var tag = {};
+
+                                tag.name = query;
+                                tag.tree = rows;
+                                //console.log(tag);
+                                ret_array.push(tag);
+
+                                //console.log('rows from async.forEach db query: ', rows);
+                                //console.log("from inside asnyc.foreach", callbackRows);
+
+                                //console.log("from inside asnyc.foreach", ret_array);
+                                callback();
+                         });
+                    }, function(){
+                        callback(null, ret_array);
+                        //console.log('forEachOf callback called');
+                    });
+                    // console.log(topics);
+                }
+            ], function(err, topics){
+                //console.log("from end of waterfall: ", ret_array);
+                callback(null, ret_array);
+            });
+
+        }
+    },function(err, results) {
+
+        //results = {"one":1,"two":2,"ret_array":[[{"name":"litingjun"}],["tree":["1","2"]]]};
+        //console.log("results:");
+        //console.log(results.ret_array);
+        //console.log(JSON.stringify(results.ret_array));
+
+        res.end(JSON.stringify(results.ret_array));
+    });
+
+
+
+
+
+
+})
 
 app.get('/searchArticlesNum/keywordslist=:keywordslist', function (req, res) {
 

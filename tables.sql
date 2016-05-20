@@ -66,6 +66,7 @@ CREATE TABLE IF NOT EXISTS `class_list` (
   PRIMARY KEY (`id`,`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+
 truncate table article_detail;
 truncate table article_list;
 truncate table article_tag;
