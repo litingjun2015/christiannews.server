@@ -104,7 +104,7 @@ exports.articleList = function (url, callback) {
     var postKeyword = 'tr';
     var titleKeyword = 'td .tiezi';
     //var thumbKeyword = '.entry-thumb-right img';
-    var authorKeyword = '.entry-byline a'
+    var authorKeyword = '.author a'
 
     if(url == 'http://chinese.christianpost.com/')
     {
@@ -206,14 +206,14 @@ exports.articleList = function (url, callback) {
       if($title.text() != '')
       {
         debug( $title.text() );
-        debug( config.yimaneili.gongyuurl + $title.attr('href') );
+        debug( config.yimaneili.murl + $title.attr('href') );
         //debug( $thumb.attr('src') );
         debug( $author.text() );
 
         //var $time = $me.find('.atc_tm');
         var item = {
           title: $title.text().trim(),
-          url:   config.yimaneili.gongyuurl + $title.attr('href'),
+          url:   config.yimaneili.murl + $title.attr('href'),
           //thumb: $thumb.attr('src'),
           author: $author.text().trim(),
           //time:  $time.text().trim()
@@ -222,7 +222,7 @@ exports.articleList = function (url, callback) {
         var s = item.url.match(/\&id=([a-zA-Z0-9]+)/);
         if (Array.isArray(s)) {
           //debug(s);
-          item.id = s[1];
+          item.id = (s[1]*100).toString(); //避免和基督邮报重复
           debug(item.id);
           articleList.push(item);
         }
@@ -264,6 +264,13 @@ exports.articleDetail = function (url, callback) {
     // 根据网页内容创建DOM操作对象
     var $ = cheerio.load(res.body.toString());
 
+    var s = url.match(/-([a-zA-Z0-9]+)\//);
+    //debug(s);
+    if (Array.isArray(s)) {
+      id = s[1];
+      //debug(id);
+    }
+
     // 获取文章标签
     var tags = [];
     $('.blog_tag h3 a').each(function () {
@@ -274,17 +281,23 @@ exports.articleDetail = function (url, callback) {
     });
 
     // 获取文章内容
-    //if($('.entry-content').html() != null)
-    //  var content = $('.entry-content').html().trim();
-    if($('article').html() != null)
-      var content = $('article').html().trim();
+    //var content = $('.entry-content').html().trim();
+    //var content = res.body.toString();
+    var content = '';//= $('.s_clear').html().trim();
 
-    //debug(content);
+    $('.s_clear .sec').each(function(index, value){
+      //var k = $('th', this).text(), v = $('td', this).text();
 
-    var time_text = new Date().Format("yyyy-MM-dd hh:mm");
+      if( !(this.html().trim().indexOf('相关回复') > -1) && !(this.html().trim().indexOf('发起新话题') > -1) && !(this.html().trim().indexOf('回复') > -1))
+        content = content + this.html().trim();
 
-    if($('.date') != null)
-       time_text = $('.date').text();
+      //debug(content);
+    });
+
+    var time_text = $('.time').text().substring(0,19);
+
+    if(time_text == null || time_text == '')
+      time_text = new Date().Format("yyyy-MM-dd hh:mm");
 
     // 返回结果
     callback(null, {tags: tags, content: content, time_text: time_text});

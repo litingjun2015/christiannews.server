@@ -1,3 +1,7 @@
+truncate table article_detail;
+truncate table article_list;
+truncate table article_tag;
+truncate table class_list;
 
 --
 -- 2016-05-20

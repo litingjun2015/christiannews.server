@@ -62,7 +62,7 @@ app.get('/taglist', function (req, res) {
 
             async.waterfall([
                 function(callback) {
-                    db.query('SELECT DISTINCT category_name FROM class_list',
+                    db.query('SELECT DISTINCT category_name FROM class_list order by CAST(id AS UNSIGNED)',
                         function(err, rows){
                             callback(err, rows);
                         });
@@ -114,11 +114,6 @@ app.get('/taglist', function (req, res) {
 
         res.end(JSON.stringify(results.ret_array));
     });
-
-
-
-
-
 
 })
 
