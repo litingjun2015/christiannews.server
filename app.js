@@ -44,6 +44,20 @@ app.get('/', function(req, res, next){
 
 // rest api
 
+app.get('/taglistwithoutcategoryname', function (req, res) {
+
+    db.query('SELECT name,id FROM `class_list` order by CAST(id AS UNSIGNED)' ,
+        function (err, data) {
+            if (err)
+            {
+                console.log( err );
+            }
+
+            //console.log( data );
+            res.end( JSON.stringify(data) );
+        });
+
+})
 
 app.get('/taglist', function (req, res) {
 
