@@ -64,8 +64,8 @@ app.get('/excuteSql/sql=:sql', function (req, res) {
 
 app.get('/getTagArticleNum/tagid=:tagid', function (req, res) {
 
-    var sql = 'SELECT count FROM `class_list`' +
-        ' WHERE id= '+req.params.tagid;
+    var sql = 'SELECT count(*) count FROM `article_list` ' +
+        ' where class_id = '+req.params.tagid;
 
     console.log(sql);
 
