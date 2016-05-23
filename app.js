@@ -44,6 +44,25 @@ app.get('/', function(req, res, next){
 
 // rest api
 
+app.get('/getTagArticleNum/tagid=:tagid', function (req, res) {
+
+    var sql = 'SELECT count FROM `class_list`' +
+        ' WHERE id= '+req.params.tagid;
+
+    console.log(sql);
+
+    db.query(sql, function (err, data) {
+        if (err)
+        {
+            console.log( err );
+        }
+
+        console.log( data );
+        res.end( JSON.stringify(data) );
+    });
+
+})
+
 app.get('/taglistwithoutcategoryname', function (req, res) {
 
     db.query('SELECT name,id FROM `class_list` order by CAST(id AS UNSIGNED)' ,

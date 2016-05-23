@@ -7,6 +7,8 @@ truncate table class_list;
 -- 2016-05-20
 --
 
+desc `class_list`;
+
 alter table `class_list`
 Add column category_name text FIRST;
 
