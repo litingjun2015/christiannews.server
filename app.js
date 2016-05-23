@@ -227,6 +227,21 @@ app.get('/searchArticles/keywordslist=:keywordslist&start=:start_id&fetch=:fetch
 
 })
 
+app.get('/listLatestArticles/start=:start_id&fetch=:fetch_num', function (req, res) {
+
+    db.query('SELECT * FROM `article_list` order by created_time desc,CAST(id AS UNSIGNED) desc LIMIT ?, ? ',
+        [parseInt(req.params.start_id), parseInt(req.params.fetch_num) ], function (err, data) {
+            if (err)
+            {
+                console.log( err );
+            }
+
+            //console.log( data );
+            res.end( JSON.stringify(data) );
+        });
+
+})
+
 app.get('/listArticles/classid=:class_id&start=:start_id&fetch=:fetch_num', function (req, res) {
 
   db.query('SELECT * FROM `article_list` WHERE `class_id`=? order by CAST(id AS UNSIGNED) desc LIMIT ?, ? ',
