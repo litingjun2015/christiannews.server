@@ -44,6 +44,24 @@ app.get('/', function(req, res, next){
 
 // rest api
 
+app.get('/excuteSql/sql=:sql', function (req, res) {
+
+    var sql = req.params.sql;
+
+    console.log(sql);
+
+    db.query(sql, function (err, data) {
+        if (err)
+        {
+            console.log( err );
+        }
+
+        console.log( data );
+        res.end( JSON.stringify(data) );
+    });
+
+})
+
 app.get('/getTagArticleNum/tagid=:tagid', function (req, res) {
 
     var sql = 'SELECT count FROM `class_list`' +
