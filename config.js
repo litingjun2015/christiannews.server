@@ -78,6 +78,11 @@ exports.port = 3000;
 
 // 定时更新
 //exports.autoUpdate = '* */30 * * *';  // 任务执行规则，参考 cron 语法
-exports.autoUpdate = '*/10 * * * *';  // 任务执行规则，参考 cron 语法
+//exports.autoUpdate = '*/10 * * * *';  // 任务执行规则，参考 cron 语法
+
+//每10分钟执行一次
+exports.autoUpdate = '0,10,20,30,40,50 * * * *';  // 任务执行规则，参考 cron 语法
+
+exports.yimaneiliUpdate = '3,13,23,33,43,53 * * * *';  // 任务执行规则，参考 cron 语法
 
 exports.archiveUpdate = '*/59 * * * *';  // 任务执行规则，参考 cron 语法
