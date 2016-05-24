@@ -62,6 +62,62 @@ app.get('/excuteSql/sql=:sql', function (req, res) {
 
 })
 
+app.get('/getTagnameFromNewsid/newsid=:newsid', function (req, res) {
+
+    var sql = 'SELECT category_name,name FROM `class_list` where id = (SELECT class_id FROM `article_list` ' +
+        ' where id = '+req.params.newsid+ ' limit 1)';
+
+    console.log(sql);
+
+    db.query(sql, function (err, data) {
+        if (err)
+        {
+            console.log( err );
+        }
+
+        console.log( data );
+        res.end( JSON.stringify(data) );
+    });
+
+})
+
+app.get('/getTagnameFromid/tagid=:tagid', function (req, res) {
+
+    var sql = 'SELECT name FROM `class_list` ' +
+        ' where id = '+req.params.tagid;
+
+    console.log(sql);
+
+    db.query(sql, function (err, data) {
+        if (err)
+        {
+            console.log( err );
+        }
+
+        console.log( data );
+        res.end( JSON.stringify(data) );
+    });
+
+})
+
+app.get('/getArticleNum', function (req, res) {
+
+    var sql = 'SELECT count(*) count FROM `article_list` ';
+
+    console.log(sql);
+
+    db.query(sql, function (err, data) {
+        if (err)
+        {
+            console.log( err );
+        }
+
+        console.log( data );
+        res.end( JSON.stringify(data) );
+    });
+
+})
+
 app.get('/getTagArticleNum/tagid=:tagid', function (req, res) {
 
     var sql = 'SELECT count(*) count FROM `article_list` ' +
