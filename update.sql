@@ -13,4 +13,4 @@ alter table `class_list`
 Add column category_name text FIRST;
 
 select * from `class_list`;
-update class_list set category_name = '基督邮报';
+update class_list set category_name = '基督邮报' where category_name is null;

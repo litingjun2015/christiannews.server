@@ -298,6 +298,21 @@ app.get('/listLatestArticles/start=:start_id&fetch=:fetch_num', function (req, r
 
 })
 
+app.get('/getArticleMeta/id=:id', function (req, res) {
+
+    db.query('SELECT * FROM `article_list` WHERE `id`=? limit 1',
+        [req.params.id], function (err, data) {
+            if (err)
+            {
+                console.log( err );
+            }
+
+            //console.log( data );
+            res.end( JSON.stringify(data) );
+        });
+
+})
+
 app.get('/listArticles/classid=:class_id&start=:start_id&fetch=:fetch_num', function (req, res) {
 
   db.query('SELECT * FROM `article_list` WHERE `class_id`=? order by CAST(id AS UNSIGNED) desc LIMIT ?, ? ',
@@ -313,7 +328,7 @@ app.get('/listArticles/classid=:class_id&start=:start_id&fetch=:fetch_num', func
 
 })
 
-// 文章页面
+// rest
 app.get('/article/:id', function (req, res, next) {
   // 通过 req.params.id 来取得 URL 中 :id 部分的参数
   read.article(req.params.id, function (err, article) {
@@ -325,6 +340,20 @@ app.get('/article/:id', function (req, res, next) {
     res.end( JSON.stringify(article) );
     //res.render('article');
   });
+});
+
+// 文章页面
+app.get('/webarticle/:id', function (req, res, next) {
+    // 通过 req.params.id 来取得 URL 中 :id 部分的参数
+    read.article(req.params.id, function (err, article) {
+        if (err) return next(err);
+
+        // 渲染模板
+        res.locals.article = article;
+        //console.log(article);
+        //res.end( JSON.stringify(article) );
+        res.render('article');
+    });
 });
 
 app.listen(config.port);
