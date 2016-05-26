@@ -14,6 +14,10 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
+var bodyParser = require('body-parser');
+app.use(bodyParser.json()); // support json encoded bodies
+app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
+
 
 // 网站首页
 app.get('/', function(req, res, next){
@@ -59,6 +63,96 @@ app.get('/excuteSql/sql=:sql', function (req, res) {
         console.log( data );
         res.end( JSON.stringify(data) );
     });
+
+})
+
+app.get('/getComments/newsid=:newsid', function (req, res) {
+
+    var sql = 'SELECT a.content, date_format(a.create_time,"%Y-%c-%d %H:%i:%s") create_time,b.nickname,b.headimgurl FROM comments a, user_wechat b' +
+        ' where a.user_id = b.id and a.article_id = \''+req.params.newsid+ '\'';
+
+    console.log(sql);
+
+    db.query(sql, function (err, data) {
+        if (err)
+        {
+            console.log( err );
+        }
+
+        console.log( data );
+        res.end( JSON.stringify(data) );
+    });
+
+})
+
+app.post('/addComment/', function (req, res) {
+
+    console.log(req.body);
+
+    db.query('INSERT INTO `comments`(`article_id`, `user_id`, `content`, `create_time`) VALUES (?, ?, ?, now())',
+        [   req.body.article_id,
+            req.body.user_id,
+            req.body.content ], function (err, data) {
+            if (err)
+            {
+                res.end( err );
+            }
+
+            res.end( JSON.stringify(data) );
+        });
+
+})
+
+app.post('/addWechatuser/', function (req, res) {
+
+    //console.log(req.body);
+
+    // 查询用户是否已存在
+    db.query('SELECT * FROM `user_wechat` WHERE `openid`=? LIMIT 1',
+        [req.body.openid], function (err, data) {
+            if (err)
+            {
+                res.end( err );
+            }
+
+            if (Array.isArray(data) && data.length >= 1) {
+                // 用户已存在，更新一下
+                db.query('UPDATE `user_wechat` SET `nickname`=?, `sex`=?, `province`=?, `city`=?, `country`=?, `headimgurl`=?, `privilege`=?, `unionid`=? WHERE `openid`=?',
+                    [req.body.nickname,
+                        req.body.sex,
+                        req.body.province,
+                        req.body.city,
+                        req.body.country,
+                        req.body.headimgurl,
+                        req.body.privilege,
+                        req.body.unionid,
+                        req.body.openid]);
+            } else {
+                // 用户不存在，添加
+                db.query('INSERT INTO `user_wechat`(`openid`, `nickname`, `sex`, `province`, `city`, `country`, `headimgurl`, `privilege`, `unionid`, `create_time`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, now())',
+                    [   req.body.openid,
+                        req.body.nickname,
+                        req.body.sex,
+                        req.body.province,
+                        req.body.city,
+                        req.body.country,
+                        req.body.headimgurl,
+                        req.body.privilege,
+                        req.body.unionid ]);
+            }
+
+        });
+
+
+    db.query('SELECT id FROM `user_wechat` WHERE `openid`=? LIMIT 1',
+        [req.body.openid], function (err, data) {
+            if (err)
+            {
+                res.end( err );
+            }
+
+            res.end( JSON.stringify(data) );
+        });
 
 })
 

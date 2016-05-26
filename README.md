@@ -27,3 +27,8 @@ pm2 是一个功能强大的进程管理器，通过 `pm2 start` 来启动 Node.
 
 关于 pm2 命令行工具的详细使用方法，可访问该工具的主页来获取：
 https://npmjs.org/package/pm2
+
+
+### 5.26 https://scotch.io/tutorials/use-expressjs-to-get-url-and-post-parameters
+
+npm install body-parser --save
