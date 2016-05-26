@@ -32,6 +32,9 @@ CREATE TABLE IF NOT EXISTS `comments` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+--
+-- 服务器
+--
 
 CREATE TABLE IF NOT EXISTS `user_wechat` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -46,6 +49,15 @@ CREATE TABLE IF NOT EXISTS `user_wechat` (
   `unionid` varchar(50),
   `create_time` DATETIME,
   PRIMARY KEY (`id`,`openid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `comments` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `article_id` varchar(20) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `content` varchar(1000) NOT NULL,
+  `create_time` DATETIME,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
