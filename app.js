@@ -66,6 +66,21 @@ app.get('/excuteSql/sql=:sql', function (req, res) {
 
 })
 
+app.get('/listWechatUsers/start=:start_id&fetch=:fetch_num', function (req, res) {
+
+    db.query('select * from user_wechat order by create_time LIMIT ?, ? ',
+        [parseInt(req.params.start_id), parseInt(req.params.fetch_num) ], function (err, data) {
+            if (err)
+            {
+                console.log( err );
+            }
+
+            //console.log( data );
+            res.end( JSON.stringify(data) );
+        });
+
+})
+
 app.get('/getComments/newsid=:newsid', function (req, res) {
 
     var sql = 'SELECT a.content, date_format(a.create_time,"%Y-%c-%d %H:%i:%s") create_time,b.nickname,b.headimgurl FROM comments a, user_wechat b' +
