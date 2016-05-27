@@ -459,6 +459,9 @@ app.get('/webarticle/:id', function (req, res, next) {
 
         // 渲染模板
         res.locals.article = article;
+
+        //console.log(res);
+        //console.log(res.locals);
         //console.log(article);
         //res.end( JSON.stringify(article) );
         res.render('article');
