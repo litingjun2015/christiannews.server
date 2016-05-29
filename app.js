@@ -81,6 +81,21 @@ app.get('/listWechatUsers/start=:start_id&fetch=:fetch_num', function (req, res)
 
 })
 
+app.get('/listDeviceUsers/start=:start_id&fetch=:fetch_num', function (req, res) {
+
+    db.query('SELECT uuid, count(*) page_view FROM `page_view` group by uuid LIMIT ?, ? ',
+        [parseInt(req.params.start_id), parseInt(req.params.fetch_num) ], function (err, data) {
+            if (err)
+            {
+                console.log( err );
+            }
+
+            //console.log( data );
+            res.end( JSON.stringify(data) );
+        });
+
+})
+
 app.get('/getComments/newsid=:newsid', function (req, res) {
 
     var sql = 'SELECT a.content, date_format(a.create_time,"%Y-%c-%d %H:%i:%s") create_time,b.nickname,b.headimgurl FROM comments a, user_wechat b' +
@@ -97,6 +112,37 @@ app.get('/getComments/newsid=:newsid', function (req, res) {
         console.log( data );
         res.end( JSON.stringify(data) );
     });
+
+})
+
+app.get('/updatePageview/newsid=:newsid&uuid=:uuid', function (req, res) {
+
+    // 查询用户是否已存在
+    db.query('SELECT * FROM `page_view` WHERE `article_id`=? and `uuid` =? LIMIT 1',
+        [req.params.newsid, req.params.uuid], function (err, data) {
+            if (err)
+            {
+                res.end( err );
+            }
+
+            if (Array.isArray(data) && data.length >= 1) {
+                // 已存在
+                res.end("已存在: " + req.params.newsid + " " + req.params.uuid);
+
+            } else {
+                // 不存在，添加
+                db.query('INSERT INTO `page_view`(`article_id`, `uuid`) VALUES (?, ? )',
+                    [   req.params.newsid,
+                        req.params.uuid ]);
+
+                // update article_list set page_view = page_view+1 where id = '2078600'
+                db.query('update `article_list` set page_view = page_view+1 where id = ? ',
+                    [   req.params.newsid ]);
+
+                res.end("添加: " + req.params.newsid + " " + req.params.uuid);
+            }
+
+        });
 
 })
 
@@ -394,7 +440,7 @@ app.get('/searchArticles/keywordslist=:keywordslist&start=:start_id&fetch=:fetch
 
 app.get('/listLatestArticles/start=:start_id&fetch=:fetch_num', function (req, res) {
 
-    db.query('SELECT * FROM `article_list` order by created_time desc,CAST(id AS UNSIGNED) desc LIMIT ?, ? ',
+    db.query('SELECT * FROM `article_list` order by page_view desc,created_time desc,CAST(id AS UNSIGNED) desc LIMIT ?, ? ',
         [parseInt(req.params.start_id), parseInt(req.params.fetch_num) ], function (err, data) {
             if (err)
             {
