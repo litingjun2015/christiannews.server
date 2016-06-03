@@ -5,6 +5,28 @@ truncate table class_list;
 
 
 --
+-- 2016-05-29
+--
+
+CREATE TABLE IF NOT EXISTS `page_view` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `article_id` varchar(20) NOT NULL,
+  `uuid` varchar(60) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+alter table `article_list`
+Add column page_view int(6) DEFAULT 0 AFTER `time_text`;
+
+
+CREATE TABLE IF NOT EXISTS `page_view` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `article_id` varchar(20) NOT NULL,
+  `uuid` varchar(60) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
 -- 2016-05-26
 --
 
