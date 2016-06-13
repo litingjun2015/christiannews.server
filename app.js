@@ -83,7 +83,7 @@ app.get('/listWechatUsers/start=:start_id&fetch=:fetch_num', function (req, res)
 
 app.get('/listDeviceUsers/start=:start_id&fetch=:fetch_num', function (req, res) {
 
-    db.query('SELECT uuid, count(*) page_view FROM `page_view` group by uuid LIMIT ?, ? ',
+    db.query('SELECT uuid, count(*) page_view FROM `page_view` group by uuid order by page_view desc LIMIT ?, ? ',
         [parseInt(req.params.start_id), parseInt(req.params.fetch_num) ], function (err, data) {
             if (err)
             {
@@ -93,6 +93,24 @@ app.get('/listDeviceUsers/start=:start_id&fetch=:fetch_num', function (req, res)
             //console.log( data );
             res.end( JSON.stringify(data) );
         });
+
+})
+
+app.get('/getDeviceUsersNum', function (req, res) {
+
+    var sql = 'select count(*) num from (SELECT distinct uuid from page_view) a ';
+
+    console.log(sql);
+
+    db.query(sql, function (err, data) {
+        if (err)
+        {
+            console.log( err );
+        }
+
+        console.log( data );
+        res.end( JSON.stringify(data) );
+    });
 
 })
 
